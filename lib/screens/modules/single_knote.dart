@@ -5,10 +5,9 @@ import 'package:knotes/components/repositories/theme_repository/textField_custom
     as ct;
 
 class SingleKnote extends StatefulWidget {
-  int id;
   KnoteModel knoteModel;
 
-  SingleKnote(this.id, this.knoteModel);
+  SingleKnote(this.knoteModel);
 
   @override
   _SingleKnoteState createState() => _SingleKnoteState();
@@ -28,7 +27,7 @@ class _SingleKnoteState extends State<SingleKnote> {
     _titleController.text = widget.knoteModel.title;
     _contentController.text = widget.knoteModel.content;
 
-    print("Tapping on ${widget.id}!");
+    //print("Tapping on ${widget.id}!");
   }
 
   @override
@@ -54,7 +53,10 @@ class _SingleKnoteState extends State<SingleKnote> {
                     hintStyle: ct.titleHint_singleKnote,
                     focusedBorder: InputBorder.none,
                   ),
-                  style: ct.title_singleKnote,
+                  style: (MediaQuery.of(context).platformBrightness ==
+                          Brightness.dark)
+                      ? ct.title_singleKnote_Dark
+                      : ct.title_singleKnote,
                   maxLines: null,
                   onChanged: (value) => _onTitleChanged(value),
                 ),
@@ -70,7 +72,10 @@ class _SingleKnoteState extends State<SingleKnote> {
                     hintStyle: ct.contentHint_singleKnote,
                     focusedBorder: InputBorder.none,
                   ),
-                  style: ct.content_singleKnote,
+                  style: (MediaQuery.of(context).platformBrightness ==
+                          Brightness.dark)
+                      ? ct.content_singleKnote_Dark
+                      : ct.content_singleKnote,
                   maxLines: null,
                   onChanged: (value) => _onContentChanged(value),
                 ),
@@ -119,6 +124,7 @@ class _SingleKnoteState extends State<SingleKnote> {
 
     print("Changing value : $value");
 
-    await RepositoryServiceKnote.updateContentKnote(widget.knoteModel.id, value);
+    await RepositoryServiceKnote.updateContentKnote(
+        widget.knoteModel.id, value);
   }
 }

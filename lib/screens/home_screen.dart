@@ -102,9 +102,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Brightness.light)
                             ? Colors.black
                             : Colors.white,
-                        border: Border.all(
-                          width: 5.0,
-                        ),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: Icon(
@@ -126,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Navigator.push(
               context,
               PageTransition(
-                child: SingleKnote(index + 1, knoteModel),
+                child: SingleKnote(knoteModel),
                 type: PageTransitionType.transferUp,
                 duration: Duration(
                   milliseconds: 400,
@@ -209,7 +206,8 @@ class _HomeScreenState extends State<HomeScreen> {
       children: List.generate(
         snapshot.data.length,
         (index) {
-          return _buildList(snapshot.data[index], index);
+          int length = snapshot.data.length - index - 1;
+          return _buildList(snapshot.data[length], index);
         },
       ),
     );
