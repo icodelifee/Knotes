@@ -111,7 +111,7 @@ class _SingleKnoteState extends State<SingleKnote> {
 
     print("Changing value : $value");
 
-    await RepositoryServiceKnote.updateTitleKnote(widget.id, value);
+    await RepositoryServiceKnote.updateTitleKnote(widget.knoteModel.id, value);
   }
 
   _onContentChanged(String value) async {
@@ -119,6 +119,6 @@ class _SingleKnoteState extends State<SingleKnote> {
 
     print("Changing value : $value");
 
-    await RepositoryServiceKnote.updateContentKnote(widget.id, value);
+    await RepositoryServiceKnote.updateContentKnote(widget.knoteModel.id, value);
   }
 }

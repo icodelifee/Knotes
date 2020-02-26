@@ -18,9 +18,9 @@ class RepositoryServiceKnote {
     return knotes;
   }
 
-  static Future<KnoteModel> getKnote(String timestamp) async {
+  static Future<KnoteModel> getKnote(String id) async {
     final sql =
-        '''select * from ${DatabaseCreator.knotes_table} where ${DatabaseCreator.timestamp} == $timestamp''';
+        '''select * from ${DatabaseCreator.knotes_table} where ${DatabaseCreator.id} == $id''';
 
     final data = await db.rawQuery(sql);
 
@@ -55,7 +55,7 @@ class RepositoryServiceKnote {
     final data = await db.rawQuery(sql);
     KnoteModel knoteModel;
     if (data.isEmpty) {
-      knoteModel = KnoteModel("", "");
+      knoteModel = KnoteModel("", "", "");
       return knoteModel;
     }
     knoteModel = KnoteModel.fromJSON(data[0]);
@@ -65,11 +65,12 @@ class RepositoryServiceKnote {
 
   static Future<void> addKnote(KnoteModel knoteModel) async {
     final sql = '''insert into ${DatabaseCreator.knotes_table} (
+      '${DatabaseCreator.id}',
       '${DatabaseCreator.title}',
       '${DatabaseCreator.content}'
     ) 
-    values(?,?)''';
-    List<dynamic> params = [knoteModel.title, knoteModel.content];
+    values(?,?,?)''';
+    List<dynamic> params = [knoteModel.id, knoteModel.title, knoteModel.content];
     final sql2 = '''DELETE FROM ${DatabaseCreator.temp_table}''';
 
     Batch batch = db.batch();
@@ -79,16 +80,16 @@ class RepositoryServiceKnote {
     await batch.commit();
   }
 
-  static Future<void> updateKnote(int id, KnoteModel knoteModel) async {
+  static Future<void> updateKnote(KnoteModel knoteModel) async {
     final sql =
         '''update ${DatabaseCreator.knotes_table} set ${DatabaseCreator.title} = ? and ${DatabaseCreator.content} = ? id = ?''';
 
-    List<dynamic> params = [knoteModel.title, knoteModel.content, id];
+    List<dynamic> params = [knoteModel.title, knoteModel.content, knoteModel.id];
 
     await db.rawUpdate(sql, params);
   }
 
-  static Future<void> updateTitleKnote(int id, String value) async {
+  static Future<void> updateTitleKnote(String id, String value) async {
     final sql =
         '''update ${DatabaseCreator.knotes_table} set ${DatabaseCreator.title} = ? where id = ?''';
 
@@ -99,7 +100,7 @@ class RepositoryServiceKnote {
     print("Success!");
   }
 
-  static Future<void> updateContentKnote(int id, String value) async {
+  static Future<void> updateContentKnote(String id, String value) async {
     final sql =
         '''update ${DatabaseCreator.knotes_table} set ${DatabaseCreator.content} = ? where id = ?''';
 
@@ -111,8 +112,8 @@ class RepositoryServiceKnote {
 
   static Future<void> deleteKnote(KnoteModel knoteModel) async {
     Batch _batch = db.batch();
-    final sql = '''delete from ${DatabaseCreator.knotes_table} where ${DatabaseCreator.title} = ? and ${DatabaseCreator.content} = ? ''';
-    List<dynamic> params = [knoteModel.title, knoteModel.content];
+    final sql = '''delete from ${DatabaseCreator.knotes_table} where ${DatabaseCreator.id} = ?''';
+    List<dynamic> params = [knoteModel.id];
 
     _batch.execute(sql, params);
 

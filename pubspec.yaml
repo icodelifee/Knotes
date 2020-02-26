@@ -32,7 +32,8 @@ dependencies:
   flutter_staggered_animations: ^0.1.2
   loading_more_list: ^1.0.5
   concentric_transition: ^0.1.1
-  uuid: ^2.0.4
+  intl: ^0.16.1
+
 
 dev_dependencies:
   flutter_test:

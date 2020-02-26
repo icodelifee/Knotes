@@ -15,7 +15,7 @@ class _NoteTakingScreenState extends State<NoteTakingScreen> {
   TextEditingController _titleController = new TextEditingController();
   TextEditingController _contentController = new TextEditingController();
 
-  String title, content;
+  String id, title, content;
 
   KnoteModel knoteModel;
 
@@ -40,7 +40,7 @@ class _NoteTakingScreenState extends State<NoteTakingScreen> {
         title = _titleController.text;
         content = _contentController.text;
 
-        knoteModel = new KnoteModel(title, content);
+        knoteModel = new KnoteModel("", title, content);
 
         RepositoryServiceKnote.addTempData(knoteModel);
         // Navigator.pop(context);
@@ -95,6 +95,10 @@ class _NoteTakingScreenState extends State<NoteTakingScreen> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
+
+            var now = DateTime.now();
+
+            id = now.millisecondsSinceEpoch.toString();
             title = _titleController.text;
             content = _contentController.text;
 
@@ -102,7 +106,7 @@ class _NoteTakingScreenState extends State<NoteTakingScreen> {
               Navigator.pop(context);
               return;
             }
-            knoteModel = new KnoteModel(title, content);
+            knoteModel = new KnoteModel(id, title, content);
             await RepositoryServiceKnote.addKnote(knoteModel);
             _titleController.clear();
             _contentController.clear();

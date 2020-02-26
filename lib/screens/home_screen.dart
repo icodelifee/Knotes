@@ -5,8 +5,6 @@ import 'package:knotes/components/models/knote_model.dart';
 import 'package:knotes/components/repositories/RepositoryServiceKnote.dart';
 import 'package:knotes/screens/modules/empty_list.dart';
 import 'package:knotes/screens/note_taking_screen.dart';
-import 'package:knotes/components/repositories/theme_repository/textField_custom_theme.dart'
-    as ct;
 
 import 'modules/single_knote.dart';
 
@@ -16,24 +14,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Future<List<KnoteModel>> _future;
-
-  UniqueKey _cardKey = UniqueKey();
+  Stream<List<KnoteModel>> _future;
 
   @override
   void initState() {
     super.initState();
-    _getFuture();
-  }
-
-  _getFuture() {
-    setState(() {
-      _future = RepositoryServiceKnote.getAllKnotes();
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    _future = RepositoryServiceKnote.getAllKnotes().asStream();
     return Scaffold(
       body: CustomScrollView(
         physics: BouncingScrollPhysics(),
@@ -46,11 +36,13 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Text("Knotes"),
             ),
           ),
-          FutureBuilder<List<KnoteModel>>(
-            future: RepositoryServiceKnote.getAllKnotes(),
+          StreamBuilder<List<KnoteModel>>(
+            stream: _future,
             builder: (context, snapshot) {
-              if (snapshot.hasData)
+              if (snapshot.hasData &&
+                  snapshot.connectionState == ConnectionState.done) {
                 return _getKnotes(snapshot);
+              }
               // snapshot.data.map((knote) => _buildList(knote)).toList());
               else
                 return EmptyList();
@@ -84,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
           onLongPress: () {
             print("Long press");
             showModalBottomSheet(
-              // backgroundrColor: Colors.grey,
+              backgroundColor: Colors.transparent,
               context: context,
               builder: (context) => Container(
                 padding: EdgeInsets.symmetric(
@@ -96,20 +88,31 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () async =>
                         await RepositoryServiceKnote.deleteKnote(knoteModel)
                             .then((value) {
+                      setState(() {
+                        _future =
+                            RepositoryServiceKnote.getAllKnotes().asStream();
+                      });
                       Navigator.pop(context);
                     }),
                     child: Container(
-                      width: MediaQuery.of(context).size.width,
+                      width: MediaQuery.of(context).size.width / 2,
                       height: 70.0,
                       decoration: BoxDecoration(
+                        color: (MediaQuery.of(context).platformBrightness ==
+                                Brightness.light)
+                            ? Colors.black
+                            : Colors.white,
                         border: Border.all(
-                          color: Colors.red,
                           width: 5.0,
                         ),
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: Icon(
-                        Icons.delete_outline,
-                        color: Colors.red,
+                        Icons.delete,
+                        color: (MediaQuery.of(context).platformBrightness ==
+                                Brightness.light)
+                            ? Colors.white
+                            : Colors.black,
                         size: 40.0,
                       ),
                     ),
@@ -199,7 +202,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _getKnotes(AsyncSnapshot<List<KnoteModel>> snapshot) {
     return SliverGrid.count(
-      key: _cardKey,
       crossAxisCount: 2,
       childAspectRatio: 0.75,
       // crossAxisSpacing: 10.0,
@@ -207,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
       children: List.generate(
         snapshot.data.length,
         (index) {
-          _buildList(snapshot.data[index], index);
+          return _buildList(snapshot.data[index], index);
         },
       ),
     );

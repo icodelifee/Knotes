@@ -13,7 +13,7 @@ class DatabaseCreator {
 
   Future<void> createKnotesTable(Database db) async {
     final todoSql = '''CREATE TABLE IF NOT EXISTS $knotes_table (
-      $id INTEGER PRIMARY KEY AUTOINCREMENT,
+      $id TEXT PRIMARY KEY,
       $title TEXT,
       $content TEXT
     )''';
