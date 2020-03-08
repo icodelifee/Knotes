@@ -75,7 +75,7 @@ class _SingleKnoteState extends State<SingleKnote> {
                   style: (MediaQuery.of(context).platformBrightness ==
                           Brightness.dark)
                       ? ct.content_singleKnote_Dark
-                      : ct.content_singleKnote,
+                      : ct.content_singleKnote  ,
                   maxLines: null,
                   onChanged: (value) => _onContentChanged(value),
                 ),

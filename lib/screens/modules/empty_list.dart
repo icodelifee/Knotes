@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class EmptyList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print("Empty List");
     return SliverFillRemaining(
-      hasScrollBody: true,
-      fillOverscroll: false,
-      child: Text(
-        "Empty",
-        style: TextStyle(color: Colors.black),
+      child: Container(
+        width: 300.0,
+        height: 300.0,
+        color: Colors.red,
       ),
     );
   }

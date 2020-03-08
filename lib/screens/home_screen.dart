@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_page_transition/flutter_page_transition.dart';
-import 'package:knotes/components/models/DynamicTheme.dart';
 import 'package:knotes/components/models/knote_model.dart';
 import 'package:knotes/components/repositories/RepositoryServiceKnote.dart';
 import 'package:knotes/screens/modules/empty_list.dart';
@@ -39,8 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
           StreamBuilder<List<KnoteModel>>(
             stream: _future,
             builder: (context, snapshot) {
-              if (snapshot.hasData &&
-                  snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasData) {
                 return _getKnotes(snapshot);
               }
               // snapshot.data.map((knote) => _buildList(knote)).toList());

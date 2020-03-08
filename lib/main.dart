@@ -84,6 +84,7 @@ class MyApp extends StatelessWidget {
     // theme.setTheme(brightness);
     return MaterialApp(
       title: 'Knotes',
+      debugShowCheckedModeBanner: false,
       themeMode: theme.getDarkMode(),
       theme: lightThemeData,
       darkTheme: darkThemeData,
