@@ -49,7 +49,6 @@ class _NoteTakingScreenState extends State<NoteTakingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("ohm");
     return WillPopScope(
       onWillPop: () async {
         title = _titleController.text;
@@ -80,7 +79,7 @@ class _NoteTakingScreenState extends State<NoteTakingScreen> {
                   controller: _titleController,
                   cursorWidth: 3.0,
                   cursorColor: Colors.white,
-                  autofocus: true,
+
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(15.0),
@@ -96,7 +95,7 @@ class _NoteTakingScreenState extends State<NoteTakingScreen> {
                   focusNode: _contentFocus,
                   cursorColor: Colors.white,
                   cursorWidth: 2.0,
-                  textInputAction: TextInputAction.done,
+                  textInputAction: TextInputAction.newline,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(15.0),
                     border: InputBorder.none,
