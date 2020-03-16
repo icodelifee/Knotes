@@ -34,6 +34,7 @@ dependencies:
   concentric_transition: ^0.1.1
   intl: ^0.16.1
   flutter_launcher_icons: ^0.7.4
+  android_alarm_manager: ^0.4.5+5
 
 flutter_icons:
   android: true

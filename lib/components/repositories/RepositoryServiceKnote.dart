@@ -47,6 +47,7 @@ class RepositoryServiceKnote {
     batch.execute(sql, params);
 
     await batch.commit();
+    print(params);
   }
 
   static Future<KnoteModel> getTempData() async {
@@ -60,6 +61,8 @@ class RepositoryServiceKnote {
     }
     knoteModel = KnoteModel.fromJSON(data[0]);
 
+    print(knoteModel.title + " " + knoteModel.content);
+
     return knoteModel;
   }
 
@@ -70,7 +73,11 @@ class RepositoryServiceKnote {
       '${DatabaseCreator.content}'
     ) 
     values(?,?,?)''';
-    List<dynamic> params = [knoteModel.id, knoteModel.title, knoteModel.content];
+    List<dynamic> params = [
+      knoteModel.id,
+      knoteModel.title,
+      knoteModel.content
+    ];
     final sql2 = '''DELETE FROM ${DatabaseCreator.temp_table}''';
 
     Batch batch = db.batch();
@@ -84,7 +91,11 @@ class RepositoryServiceKnote {
     final sql =
         '''update ${DatabaseCreator.knotes_table} set ${DatabaseCreator.title} = ? and ${DatabaseCreator.content} = ? id = ?''';
 
-    List<dynamic> params = [knoteModel.title, knoteModel.content, knoteModel.id];
+    List<dynamic> params = [
+      knoteModel.title,
+      knoteModel.content,
+      knoteModel.id
+    ];
 
     await db.rawUpdate(sql, params);
   }
@@ -112,7 +123,8 @@ class RepositoryServiceKnote {
 
   static Future<void> deleteKnote(KnoteModel knoteModel) async {
     Batch _batch = db.batch();
-    final sql = '''delete from ${DatabaseCreator.knotes_table} where ${DatabaseCreator.id} = ?''';
+    final sql =
+        '''delete from ${DatabaseCreator.knotes_table} where ${DatabaseCreator.id} = ?''';
     List<dynamic> params = [knoteModel.id];
 
     _batch.execute(sql, params);

@@ -26,6 +26,7 @@ class _NoteTakingScreenState extends State<NoteTakingScreen> {
   }
 
   _initialise() async {
+    print("Initialisation is being done!");
     knoteModel = await RepositoryServiceKnote.getTempData();
     setState(() {
       _titleController.text = knoteModel.title;
@@ -95,7 +96,6 @@ class _NoteTakingScreenState extends State<NoteTakingScreen> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-
             var now = DateTime.now();
 
             id = now.millisecondsSinceEpoch.toString();

@@ -10,7 +10,7 @@ TextStyle title = TextStyle(
 
 TextStyle titleHint = TextStyle(
   fontFamily: 'NexaBold',
-  color: Colors.white12,
+  color: Colors.white38,
   // letterSpacing: 5.0,
   fontWeight: FontWeight.bold,
   fontSize: 60.0,
@@ -18,7 +18,7 @@ TextStyle titleHint = TextStyle(
 
 TextStyle contentHint = TextStyle(
   fontFamily: 'NexaLight',
-  color: Colors.white12,
+  color: Colors.white38,
   letterSpacing: 1.0,
   fontWeight: FontWeight.bold,
   fontSize: 30.0,
