@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:knotes/components/models/knote_model.dart';
 import 'package:knotes/components/repositories/RepositoryServiceKnote.dart';
 import 'package:knotes/components/repositories/theme_repository/textField_custom_theme.dart'
@@ -11,7 +12,7 @@ class NoteTakingScreen extends StatefulWidget {
 
 class _NoteTakingScreenState extends State<NoteTakingScreen> {
   final _formState = GlobalKey<FormState>();
-
+  FocusNode _contentFocus;
   TextEditingController _titleController = new TextEditingController();
   TextEditingController _contentController = new TextEditingController();
 
@@ -22,6 +23,12 @@ class _NoteTakingScreenState extends State<NoteTakingScreen> {
   @override
   void initState() {
     _initialise();
+    _contentFocus = FocusNode();
+    KeyboardVisibilityNotification().addNewListener(
+      onChange: (bool visible) {
+        if (!visible) _contentFocus.unfocus();
+      },
+    );
     super.initState();
   }
 
@@ -35,7 +42,14 @@ class _NoteTakingScreenState extends State<NoteTakingScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _contentFocus.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print("ohm");
     return WillPopScope(
       onWillPop: () async {
         title = _titleController.text;
@@ -66,6 +80,7 @@ class _NoteTakingScreenState extends State<NoteTakingScreen> {
                   controller: _titleController,
                   cursorWidth: 3.0,
                   cursorColor: Colors.white,
+                  autofocus: true,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(15.0),
@@ -78,8 +93,10 @@ class _NoteTakingScreenState extends State<NoteTakingScreen> {
                 ),
                 TextField(
                   controller: _contentController,
+                  focusNode: _contentFocus,
                   cursorColor: Colors.white,
                   cursorWidth: 2.0,
+                  textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(15.0),
                     border: InputBorder.none,
